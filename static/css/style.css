@@ -1,0 +1,68 @@
+.card img {
+    height: 350px;
+    object-fit: cover;
+}
+
+.card {
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: scale(1.03);
+}
+.card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Home page movie poster size */
+.movie-poster {
+    height: 280px;        /* controls poster height */
+    object-fit: cover;    /* crop image properly */
+}
+
+/* Improve card look */
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+    border-radius: 8px;
+}
+
+.seat-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 10px;
+    max-width: 400px;
+}
+
+.seat {
+    border: 1px solid #dc3545;
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.seat input {
+    display: none;
+}
+
+.seat:hover {
+    background-color: #f8d7da;
+}
+
+.booked {
+    background-color: #ccc;
+    cursor: not-allowed;
+    border-color: #999;
+}
+.selected {
+    background-color: #dc3545;
+    color: white;
+    border-color: #a71d2a;
+}

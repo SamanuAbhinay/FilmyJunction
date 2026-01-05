@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>Select Seats</h3>
+<p>{{ show.movie.title }} | {{ show.show_time }}</p>
+
+<form method="POST">
+<div class="seat-grid mt-4">
+
+{% for seat in seats %}
+    {% if seat in booked_seats %}
+        <label class="seat booked">{{ seat }}</label>
+    {% else %}
+        <label class="seat">
+            <input type="checkbox" name="seats" value="{{ seat }}">
+            {{ seat }}
+        </label>
+    {% endif %}
+{% endfor %}
+
+</div>
+
+<button class="btn btn-danger mt-4">Confirm Booking</button>
+</form>
+
+{% endblock %}
