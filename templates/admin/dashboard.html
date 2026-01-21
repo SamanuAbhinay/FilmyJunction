@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>🎬 Admin Dashboard</h2>
+
+  <a href="{{ url_for('add_movie') }}"
+     class="btn btn-success">
+     ➕ Add New Movie
+  </a>
+</div>
+
+<hr>
+
+<!-- ================= MOVIES ================= -->
+<h4>Movies</h4>
+
+<table class="table table-dark table-striped">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Rating</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for movie in movies %}
+    <tr>
+      <td>{{ movie.title }}</td>
+      <td>{{ movie.rating }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- ================= BOOKINGS ================= -->
+<h4 class="mt-5">Bookings</h4>
+
+<table class="table table-dark table-striped">
+  <thead>
+    <tr>
+      <th>User ID</th>
+      <th>Seat</th>
+      <th>Show ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for booking in bookings %}
+    <tr>
+      <td>{{ booking.user_id }}</td>
+      <td>{{ booking.seat_number }}</td>
+      <td>{{ booking.show_id }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

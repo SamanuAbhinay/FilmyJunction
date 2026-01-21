@@ -1,28 +1,26 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<h4 class="mb-4">Now Showing</h4>
 
-<div class="row g-4">
-    {% for movie in movies %}
-    <div class="col-6 col-md-4 col-lg-3">
+<h4>Now Showing</h4>
 
-        <a href="{{ url_for('movie_details', movie_id=movie.id) }}"
-           class="text-decoration-none text-dark">
+<div class="row">
+{% for movie in movies %}
+  <div class="col-md-3 mb-4">
+    <a href="{{ url_for('movie_details', movie_id=movie.id) }}"
+       class="text-decoration-none text-dark">
 
-            <div class="card shadow-sm h-100">
-                <img src="{{ url_for('static', filename='images/' + movie.poster) }}"
-                     class="card-img-top movie-poster">
+      <div class="card h-100">
+        <img src="{{ url_for('static', filename='images/' + movie.poster) }}"
+             class="card-img-top movie-poster">
+        <div class="card-body">
+            <h6>{{ movie.title }}</h6>
+            <p>⭐ {{ movie.rating }}</p>
+        </div>
+      </div>
 
-                <div class="card-body">
-                    <h6 class="mb-1">{{ movie.title }}</h6>
-                    <p class="mb-0">⭐ {{ movie.rating }}</p>
-                </div>
-            </div>
-
-        </a>
-
-    </div>
-    {% endfor %}
+    </a>
+  </div>
+{% endfor %}
 </div>
+
 {% endblock %}

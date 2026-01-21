@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>🎟️ My Bookings</h3>
+
+{% if bookings %}
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Movie</th>
+            <th>Theatre</th>
+            <th>Show Time</th>
+            <th>Seat</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for b in bookings %}
+        <tr>
+            <td>{{ b.show.movie.title }}</td>
+            <td>{{ b.show.screen.theatre.name }}</td>
+            <td>{{ b.show.show_time }}</td>
+            <td>{{ b.seat_number }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No bookings yet.</p>
+{% endif %}
+
+{% endblock %}

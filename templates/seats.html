@@ -1,26 +1,140 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% block title %}Select Seats{% endblock %}
+
 {% block content %}
 
-<h3>Select Seats</h3>
-<p>{{ show.movie.title }} | {{ show.show_time }}</p>
+<style>
+/* ===== SCREEN ===== */
+.screen {
+  width: 60%;
+  height: 20px;
+  background: linear-gradient(to right, #aaa, #fff, #aaa);
+  margin: 20px auto 40px;
+  border-radius: 50%;
+  text-align: center;
+  color: #000;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+/* ===== SEAT GRID ===== */
+.seat-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 45px);
+  gap: 10px;
+  justify-content: center;
+}
+
+/* ===== SEAT BASE ===== */
+.seat {
+  width: 45px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: #1e293b;
+  border: 2px solid #38bdf8;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover */
+.seat:hover {
+  background-color: #38bdf8;
+  color: #000;
+}
+
+/* Selected */
+.seat input:checked + label {
+  background-color: #22c55e;
+  border-color: #22c55e;
+  color: #000;
+}
+
+/* Booked */
+.seat.booked label {
+  background-color: #ef4444;
+  border-color: #ef4444;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Hide checkbox */
+.seat input {
+  display: none;
+}
+
+/* Seat label */
+.seat label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* ===== LEGEND ===== */
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.legend span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.legend-box {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+}
+
+.available { background: #1e293b; border: 2px solid #38bdf8; }
+.selected { background: #22c55e; }
+.booked { background: #ef4444; }
+</style>
+
+<h2 class="mb-2">🎟️ Select Seats</h2>
+<p class="text-muted">{{ show.movie.title }} | {{ show.time }}</p>
+
+<div class="screen">SCREEN THIS WAY</div>
 
 <form method="POST">
-<div class="seat-grid mt-4">
 
-{% for seat in seats %}
-    {% if seat in booked_seats %}
-        <label class="seat booked">{{ seat }}</label>
-    {% else %}
-        <label class="seat">
-            <input type="checkbox" name="seats" value="{{ seat }}">
-            {{ seat }}
-        </label>
-    {% endif %}
-{% endfor %}
+  <div class="seat-grid">
+    {% for seat in seats %}
+      {% if seat in booked_seats %}
+        <div class="seat booked">
+          <label>{{ seat }}</label>
+        </div>
+      {% else %}
+        <div class="seat">
+          <input type="checkbox" name="seats" value="{{ seat }}" id="{{ seat }}">
+          <label for="{{ seat }}">{{ seat }}</label>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
 
-</div>
+  <div class="legend">
+    <span><div class="legend-box available"></div> Available</span>
+    <span><div class="legend-box selected"></div> Selected</span>
+    <span><div class="legend-box booked"></div> Booked</span>
+  </div>
 
-<button class="btn btn-danger mt-4">Confirm Booking</button>
+  <div class="text-center mt-4">
+    <button class="btn btn-danger px-4 py-2">
+      🎬 Confirm Booking
+    </button>
+  </div>
+
+  
 </form>
 
 {% endblock %}
