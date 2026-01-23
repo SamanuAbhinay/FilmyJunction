@@ -6,15 +6,19 @@
 <style>
 /* ===== SCREEN ===== */
 .screen {
-  width: 60%;
-  height: 20px;
-  background: linear-gradient(to right, #aaa, #fff, #aaa);
-  margin: 20px auto 40px;
-  border-radius: 50%;
-  text-align: center;
-  color: #000;
+  width: 65%;
+  height: 25px;
+  margin: 0 auto 45px;
+  background: linear-gradient(to bottom, #ffffff, #cfcfcf);
+  border-radius: 0 0 60% 60%;
+  box-shadow: 0 12px 30px rgba(255, 255, 255, 0.35);
   font-size: 12px;
-  line-height: 20px;
+  letter-spacing: 3px;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
 }
 
 /* ===== SEAT GRID ===== */
@@ -109,24 +113,25 @@
 
   <div class="seat-grid">
     {% for seat in seats %}
-      {% if seat in booked_seats %}
-        <div class="seat booked">
-          <label>{{ seat }}</label>
-        </div>
-      {% else %}
-        <div class="seat">
-          <input type="checkbox" name="seats" value="{{ seat }}" id="{{ seat }}">
-          <label for="{{ seat }}">{{ seat }}</label>
-        </div>
-      {% endif %}
+      {% set is_booked = seat in booked_seats %}
+      <div class="seat {% if is_booked %}booked{% endif %}">
+        <input type="checkbox"
+               id="seat{{ seat }}"
+               name="seats"
+               value="{{ seat }}"
+               {% if is_booked %}disabled{% endif %}>
+        <label for="seat{{ seat }}">{{ seat }}</label>
+      </div>
     {% endfor %}
+
   </div>
 
   <div class="legend">
-    <span><div class="legend-box available"></div> Available</span>
-    <span><div class="legend-box selected"></div> Selected</span>
-    <span><div class="legend-box booked"></div> Booked</span>
-  </div>
+  <div><span class="legend-box available"></span> Available</div>
+  <div><span class="legend-box selected"></span> Selected</div>
+  <div><span class="legend-box booked"></span> Booked</div>
+</div>
+
 
   <!-- 💰 PRICE SUMMARY -->
   <div class="booking-summary mt-4 p-3 rounded-3 text-center">
@@ -151,6 +156,18 @@
 </form>
 
 <!-- JS -->
-<script src="{{ url_for('static', filename='js/seats.js') }}"></script>
+<script>
+  const seatPrice = 200;
+  const checkboxes = document.querySelectorAll('input[name="seats"]');
+  const totalAmountEl = document.getElementById('totalAmount');
+
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      const selectedSeats = document.querySelectorAll('input[name="seats"]:checked').length;
+      const totalAmount = selectedSeats * seatPrice;
+      totalAmountEl.textContent = totalAmount;
+    });
+  });
+</script>
 
 {% endblock %}

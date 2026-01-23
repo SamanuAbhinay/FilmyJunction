@@ -89,7 +89,7 @@ def select_seats(show_id):
         return redirect(url_for("booking_success"))
 
     seats = []
-    for row in "ABCDEFGHIJ":
+    for row in "JIHGFEDCBA":
         for num in range(1, 9):
             seats.append(f"{row}{num}")
 
