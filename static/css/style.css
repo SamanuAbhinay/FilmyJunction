@@ -82,3 +82,38 @@ h3 {
 .table th, .table td {
     vertical-align: middle;
 }
+
+.booking-summary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 16px;
+}
+
+.booking-summary .price {
+  color: #FFD700;
+  font-weight: 600;
+}
+
+.booking-summary .total {
+  color: #00ff9c;
+  font-size: 18px;
+}
+
+/* Seats */
+.seat {
+  display: inline-block;
+  padding: 10px;
+  margin: 6px;
+  background: #444;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.seat.selected {
+  background: #28a745;
+}
+.seat.booked {
+  background: #6c757d;
+  cursor: not-allowed;
+}

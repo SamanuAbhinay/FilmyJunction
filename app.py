@@ -94,7 +94,7 @@ def select_seats(show_id):
             seats.append(f"{row}{num}")
 
     return render_template(
-        "seats.html",
+        "seat_selection.html",
         show=show,
         seats=seats,
         booked_seats=booked_seats

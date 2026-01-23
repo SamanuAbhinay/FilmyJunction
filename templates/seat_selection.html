@@ -128,6 +128,19 @@
     <span><div class="legend-box booked"></div> Booked</span>
   </div>
 
+  <!-- 💰 PRICE SUMMARY -->
+  <div class="booking-summary mt-4 p-3 rounded-3 text-center">
+    <p class="mb-1">
+      🎟 Price per seat:
+      <span class="price">₹<span id="seatPrice">200</span></span>
+    </p>
+
+    <p class="mb-0 fw-bold">
+      💰 Total Amount:
+      <span class="total">₹<span id="totalAmount">0</span></span>
+    </p>
+  </div>
+
   <div class="text-center mt-4">
     <button class="btn btn-danger px-4 py-2">
       🎬 Confirm Booking
@@ -136,5 +149,8 @@
 
   
 </form>
+
+<!-- JS -->
+<script src="{{ url_for('static', filename='js/seats.js') }}"></script>
 
 {% endblock %}
