@@ -64,40 +64,47 @@ def movie_shows(movie_id):
     return render_template("shows.html", movie=movie, shows=shows)
 
 # ================= SEAT SELECTION =================
-@app.route("/show/<int:show_id>/seats", methods=["GET", "POST"])
+@app.route('/show/<int:show_id>/seats', methods=['GET', 'POST'])
 @login_required
 def select_seats(show_id):
     show = Show.query.get_or_404(show_id)
 
     booked_seats = [
-        s.seat_number
-        for s in SeatBooking.query.filter_by(show_id=show_id).all()
+        s.seat_number for s in
+        SeatBooking.query.filter_by(show_id=show_id).all()
     ]
-
-    if request.method == "POST":
-        selected_seats = request.form.getlist("seats")
-
-        for seat in selected_seats:
-            booking = SeatBooking(
-                show_id=show_id,
-                seat_number=seat,
-                user_id=current_user.id
-            )
-            db.session.add(booking)
-
-        db.session.commit()
-        return redirect(url_for("booking_success"))
+  
 
     seats = []
-    for row in "JIHGFEDCBA":
+    seat_prices = {}
+
+    # Silver seats
+    for row in "JIH":
         for num in range(1, 9):
-            seats.append(f"{row}{num}")
+            seat = f"{row}{num}"
+            seats.append(seat)
+            seat_prices[seat] = 150
+
+    # Gold seats
+    for row in "GFEDC":
+        for num in range(1, 9):
+            seat = f"{row}{num}"
+            seats.append(seat)
+            seat_prices[seat] = 200
+
+    # Recliner seats
+    for row in "BA":
+        for num in range(1, 9):
+            seat = f"{row}{num}"
+            seats.append(seat)
+            seat_prices[seat] = 350
 
     return render_template(
         "seat_selection.html",
         show=show,
         seats=seats,
-        booked_seats=booked_seats
+        booked_seats=booked_seats,
+        seat_prices=seat_prices
     )
 
 # ================= BOOKING SUCCESS =================
