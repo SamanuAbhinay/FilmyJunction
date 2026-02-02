@@ -26,7 +26,8 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return db.session.get(User, int(user_id))
+
 
 # ================= CREATE TABLES =================
 with app.app_context():
@@ -64,35 +65,74 @@ def movie_shows(movie_id):
     return render_template("shows.html", movie=movie, shows=shows)
 
 # ================= SEAT SELECTION =================
+from sqlalchemy.exc import IntegrityError
+
 @app.route('/show/<int:show_id>/seats', methods=['GET', 'POST'])
 @login_required
 def select_seats(show_id):
-    show = Show.query.get_or_404(show_id)
+    show = db.session.get(Show, show_id)
 
+    # ===================== POST: BOOK SEATS =====================
+    if request.method == "POST":
+        selected_seats = request.form.getlist("seats")
+
+        if not selected_seats:
+            flash("Please select at least one seat.", "warning")
+            return redirect(url_for("select_seats", show_id=show_id))
+
+        # Already booked seats check (CRITICAL)
+        already_booked = {
+            s.seat_number for s in
+            SeatBooking.query.filter_by(show_id=show_id).all()
+        }
+
+        for seat in selected_seats:
+            if seat in already_booked:
+                flash(f"Seat {seat} is already booked!", "danger")
+                return redirect(url_for("select_seats", show_id=show_id))
+
+        # Save bookings
+        for seat in selected_seats:
+            booking = SeatBooking(
+                user_id=current_user.id,
+                show_id=show_id,
+                seat_number=seat
+            )
+            db.session.add(booking)
+
+        try:
+            db.session.commit()
+            flash("🎉 Seats booked successfully!", "success")
+            return redirect(url_for("my_bookings"))
+        except IntegrityError:
+            db.session.rollback()
+            flash("Booking failed. Try again.", "danger")
+            return redirect(url_for("select_seats", show_id=show_id))
+
+    # ===================== GET: SHOW SEATS =====================
     booked_seats = [
         s.seat_number for s in
         SeatBooking.query.filter_by(show_id=show_id).all()
     ]
-  
 
     seats = []
     seat_prices = {}
 
-    # Silver seats
+    # Silver
     for row in "JIH":
         for num in range(1, 9):
             seat = f"{row}{num}"
             seats.append(seat)
             seat_prices[seat] = 150
 
-    # Gold seats
+    # Gold
     for row in "GFEDC":
         for num in range(1, 9):
             seat = f"{row}{num}"
             seats.append(seat)
             seat_prices[seat] = 200
 
-    # Recliner seats
+    # Recliner
     for row in "BA":
         for num in range(1, 9):
             seat = f"{row}{num}"
@@ -106,6 +146,7 @@ def select_seats(show_id):
         booked_seats=booked_seats,
         seat_prices=seat_prices
     )
+
 
 # ================= BOOKING SUCCESS =================
 @app.route("/booking-success")
